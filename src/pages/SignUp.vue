@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref,watch } from "vue";
 import { useRouter } from "vue-router";
 import Title from "../components/Title.vue";
 import EmailField from "../components/EmailField.vue";
@@ -30,7 +30,9 @@ const router = useRouter();
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
-
+watch(email, (value) => {
+      console.log("email changed to", value);
+    });
 function onSubmit() {
   fetch("https://backend-login-placeholder.deno.dev/api/users", {
     method: "POST",
@@ -46,9 +48,14 @@ function onSubmit() {
       }
     })
     .then(() => {
-      router.push("/success");
+     /* router.push("/success");
+     document.routerPush("/success");*/
+     const push = document.routerPush || router.push;
+     push("/success")
     })
+
     .catch((error) => {
+      console.log(error)
       errorMessage.value = error.message;
     });
 }
