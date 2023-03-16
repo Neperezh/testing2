@@ -51,3 +51,27 @@ describe("password", ()=> {
     })
   })
 })
+
+describe("Email", ()=> {
+  it("Email already exists", async () => {
+    const user = userEvent.setup();
+    cleanup()
+    render (SignUp);
+    document.routerPush = vi.fn();
+
+    const emailInput = screen.getByLabelText("Your email");
+    await user.click(emailInput);
+    await user.keyboard("danielramos@gmail.com");
+
+    const passwordInput = screen.getByLabelText("Your password");
+    await user.click(passwordInput);
+    await user.keyboard("1342424");
+
+    const submitButton = screen.getByText("Signup");
+    await user.click(submitButton);
+    
+    await waitFor(() =>{
+      expect(screen.getByText("Email already exists")).toBeTruthy();
+    })
+  })
+})
